@@ -29,7 +29,7 @@ class AppConfig {
         console.log("Initializing controllers...");
         this.controllers.all().forEach((controller) => {
             controller.routes.forEach((route) => {
-                this.app.use(controller.path + route.path, route.function);
+                this.app.use("/api" + controller.path + route.path, route.function);
             });
         });
     }

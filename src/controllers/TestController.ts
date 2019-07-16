@@ -8,10 +8,9 @@ import RouteFactory from "../factories/RouteFactory";
 export class TestController extends Controller {
     public path: string = "/test";
 
-    public test: Route = new RouteFactory().createRoute("GET", "/test",
+    public test: Route = new RouteFactory().createRoute("GET", "/",
         (request: express.Request, response: express.Response) => {
-            console.log("teste"!);
-            response.send("test controller");
+            response.send("Test successful!");
         });
 
     public routes: Route[] = [ this.test ];
