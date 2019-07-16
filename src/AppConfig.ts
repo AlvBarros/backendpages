@@ -1,8 +1,10 @@
 import * as bodyParser from "body-parser";
 import express = require("express");
 
+
 import { Controllers } from "./controllers/Controllers";
 import { Routes } from "./routes/Routes";
+import { SocketService } from "./services/SocketService";
 
 class AppConfig {
     public app: express.Application;
