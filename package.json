@@ -1,0 +1,31 @@
+{
+  "name": "backendpages",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "dev": "nodemon .",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlvBarros/backendpages.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlvBarros/backendpages/issues"
+  },
+  "homepage": "https://github.com/AlvBarros/backendpages#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
+  }
+}
