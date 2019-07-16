@@ -2,7 +2,7 @@
   "name": "backendpages",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/app.js",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
@@ -22,10 +22,11 @@
   },
   "homepage": "https://github.com/AlvBarros/backendpages#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "body-parser": "1.19.0",
+    "express": "4.17.1"
   },
   "devDependencies": {
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "tslint": "5.18.0",
+    "typescript": "3.5.3"
   }
 }
