@@ -1,9 +1,9 @@
-import * as express from 'express';
+import * as express from "express";
 
-//import { ControllerConfig } from '../controllers/Controllers';
+// import { ControllerConfig } from '../controllers/Controllers';
 
 export class Routes {
-    private controllers: Array<string> = [
-        '/',
+    private controllers: string[] = [
+        "/",
     ];
 }

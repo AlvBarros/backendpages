@@ -1,7 +1,3 @@
-import app from './AppConfig'
+import AppConfig from "./AppConfig";
 
-const PORT = 3000 //TODO: set env variables
-
-app.listen(PORT, async () => {
-    console.log(`Listening on port ${PORT}`);
-})
+const app = new AppConfig();
