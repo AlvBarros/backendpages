@@ -6,14 +6,14 @@ import { Routes } from "./routes/Routes";
 
 class AppConfig {
     public app: express.Application;
-    public router: Routes = new Routes();
+    public router: express.Router;
     public controllers: Controllers = new Controllers();
     public port: number = 3000;
 
     constructor() {
         this.app = express();
+        this.router = new express.Router();
         this.config();
-        // this.router.routes(this.app);
     }
 
     private config(): void {
@@ -28,17 +28,15 @@ class AppConfig {
     private initializeControllers(): void {
         console.log("Initializing controllers...");
         this.controllers.all().forEach((controller) => {
-            controller.routes.forEach((route) => {
-                this.app.use("/api" + controller.path + route.path, route.function);
-            });
+            this.app.use(`/api${controller.path}`, controller.router);
         });
     }
 
     private initializeServer(): void {
         this.initializeControllers();
-        this.app.use("/api", (req, res) => {
-            res.send("Connected!");
-        });
+        // this.app.use("/api", (req, res) => {
+        //     res.send("Connected!");
+        // });
         this.app.listen(this.port, () => {
             console.log(`App listening on the port ${this.port}`);
           });

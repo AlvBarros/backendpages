@@ -7,6 +7,12 @@ export class Controllers {
         new TestController()
     ];
 
+    constructor() {
+        this.controllers.forEach((controller) => {
+            controller.initializeRouter();
+        });
+    }
+
     public all(): Controller[] {
         return this.controllers;
     }

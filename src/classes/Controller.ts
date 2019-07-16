@@ -7,5 +7,16 @@ export class Controller {
     public router: express.Router;
     public routes: Route[];
 
+    public initializeRouter(): void {
+        if (this.routes) {
+            this.routes.forEach((route) => {
+                if (route.httpMethod === "GET") {
+                    this.router.get(route.path, route.function);
+                } else if (route.httpMethod === "POST") {
+                    this.router.post(route.path, route.function);
+                }
+            });
+        }
+    }
 }
 export default Controller;
