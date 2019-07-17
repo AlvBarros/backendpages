@@ -1,0 +1,4 @@
+applications:
+- name: alvbarroscloud
+  random-route: true
+  memory: 256M

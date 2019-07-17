@@ -12,9 +12,13 @@ class AppConfig {
     public router: express.Router;
     public controllers: Controllers = new Controllers();
     public sockets: Sockets = new Sockets();
-    public port = 3000;
+    public port; public hostname;
 
     constructor() {
+        const cfenv = require("cfenv");
+        const appEnv = cfenv.getAppEnv();
+        this.hostname = appEnv.host;
+        this.port = appEnv.port;
         this.app = express();
         this.router = express.Router();
         this.config();
@@ -51,8 +55,8 @@ class AppConfig {
         const server = http.createServer(this.app);
         const wss = new WebSocket.Server({ server });
         this.initializeSockets(wss);
-        server.listen(3000, () => {
-            console.log(`Server started on port ${3000} :)`);
+        server.listen(this.port, this.hostname, () => {
+            console.log(`Server started on ${this.hostname}:${this.port} :)`);
         });
 
     }
