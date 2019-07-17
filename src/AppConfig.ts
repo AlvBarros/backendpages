@@ -17,8 +17,8 @@ class AppConfig {
     constructor() {
         const cfenv = require("cfenv");
         const appEnv = cfenv.getAppEnv();
-        this.hostname = appEnv.host;
-        this.port = appEnv.port;
+        this.hostname = appEnv.host || "localhost";
+        this.port = appEnv.port || 3000;
         this.app = express();
         this.router = express.Router();
         this.config();
