@@ -1,10 +1,10 @@
-import { TestController } from "./TestController";
+import { Test } from "../routes/test/Test";
 
-import Controller from "../classes/Controller";
+import Controller from "./template/Controller";
 
 export class Controllers {
     private controllers: Controller[] = [
-        new TestController()
+        new Test()
     ];
 
     constructor() {

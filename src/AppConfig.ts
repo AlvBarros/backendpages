@@ -3,10 +3,9 @@ import express = require("express");
 import * as http from "http";
 import * as WebSocket from "ws";
 
-import { Controllers } from "./controllers/Controllers";
-import { Routes } from "./routes/Routes";
-import { SocketService } from "./services/SocketService";
-import { Sockets } from "./sockets/Sockets";
+import { Controllers } from "./configuration/Controllers";
+import { Routes } from "./configuration/Routes";
+import { Sockets } from "./configuration/Sockets";
 
 class AppConfig {
     public app: express.Application;

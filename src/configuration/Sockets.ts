@@ -1,6 +1,6 @@
-import { ChatSocket } from "../sockets/ChatSocket";
+import { ChatSocket } from "../routes/chat/Chat";
 
-import Socket from "../classes/Socket";
+import Socket from "./template/Socket";
 
 export class Sockets {
     private sockets: Socket[] = [

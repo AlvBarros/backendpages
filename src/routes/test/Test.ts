@@ -1,11 +1,11 @@
 import * as express from "express";
 
-import Controller from "../classes/Controller";
-import Route from "../classes/Route";
+import Controller from "../../configuration/template/Controller";
+import Route from "../../configuration/template/Route";
 
-import RouteFactory from "../factories/RouteFactory";
+import RouteFactory from "../../configuration/template/facotries/RouteFactory";
 
-export class TestController extends Controller {
+export class Test extends Controller {
     public path: string = "/test";
     public router = express.Router();
 
@@ -24,4 +24,4 @@ export class TestController extends Controller {
     ];
 }
 
-export default TestController;
+export default Test;
