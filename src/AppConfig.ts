@@ -1,20 +1,23 @@
 import * as bodyParser from "body-parser";
 import express = require("express");
-
+import * as http from "http";
+import * as WebSocket from "ws";
 
 import { Controllers } from "./controllers/Controllers";
 import { Routes } from "./routes/Routes";
 import { SocketService } from "./services/SocketService";
+import { Sockets } from "./sockets/Sockets";
 
 class AppConfig {
     public app: express.Application;
     public router: express.Router;
     public controllers: Controllers = new Controllers();
-    public port: number = 3000;
+    public sockets: Sockets = new Sockets();
+    public port = 3000;
 
     constructor() {
         this.app = express();
-        this.router = new express.Router();
+        this.router = express.Router();
         this.config();
     }
 
@@ -34,14 +37,25 @@ class AppConfig {
         });
     }
 
+    private initializeSockets(wss: WebSocket.Server): void {
+        console.log("Initializing sockets...");
+        this.sockets.all().forEach((socket) => {
+            socket.initialize(wss);
+        });
+    }
+
     private initializeServer(): void {
         this.initializeControllers();
-        // this.app.use("/api", (req, res) => {
-        //     res.send("Connected!");
-        // });
-        this.app.listen(this.port, () => {
-            console.log(`App listening on the port ${this.port}`);
-          });
+        // this.app.listen(this.port, () => {
+        //     console.log(`App listening on the port ${this.port}`);
+        //   });
+        const server = http.createServer(this.app);
+        const wss = new WebSocket.Server({ server });
+        this.initializeSockets(wss);
+        server.listen(3000, () => {
+            console.log(`Server started on port ${3000} :)`);
+        });
+
     }
 }
 
