@@ -4,16 +4,21 @@ import * as http from "http";
 import * as WebSocket from "ws";
 
 import { Controllers } from "./configuration/Controllers";
+import { Middlewares } from "./configuration/Middlewares";
 import { Routes } from "./configuration/Routes";
 import { Sockets } from "./configuration/Sockets";
 
+import ErrorLogger from "./middlewares/ErrorLogger";
 import { Logger } from "./services/logger/Logger";
 
 class AppConfig {
     public app: express.Application;
     public router: express.Router;
+
     public controllers: Controllers = new Controllers();
     public sockets: Sockets = new Sockets();
+    public middlewares: Middlewares = new Middlewares();
+
     public logger: Logger = new Logger();
     public port; public hostname;
 
@@ -36,50 +41,41 @@ class AppConfig {
         this.initializeServer();
     }
 
+    private initializeMiddlewares(): void {
+        this.logger.Log({text: "Initializing middlewares..", color: this.logger.Yellow});
+        this.middlewares.all().sort((a, b) => b.priority - a.priority).map((middleware) => {
+            if (middleware.path === "") {
+                this.app.use((req, res, next) => {
+                    middleware.ProccessRequest(req, res, next);
+                });
+            } else {
+                this.app.use(middleware.path, (req, res, next) => {
+                    middleware.ProccessRequest(req, res, next);
+                });
+            }
+        });
+    }
+
     private initializeControllers(): void {
         this.logger.Log({text: "Initializing controllers..", color: this.logger.Yellow});
-        const format = (num: number) => {
-            return ("0" + num).slice(-2);
-        };
-        this.app.use((req, res, next) => {
-            const day = format(new Date().getDate());
-            const month = format(new Date().getMonth() + 1);
-            const year = new Date().getFullYear();
-            const hours = format(new Date().getHours());
-            const minutes = format(new Date().getMinutes());
-            const seconds = format(new Date().getSeconds());
-            this.logger.LogOnOneLine([
-                {
-                    color: this.logger.Green,
-                    text: `${req.method}:${req.path}`
-                },
-                {
-                    color: this.logger.White,
-                    text: ` ${day}/${month}/${year} @ ${hours}:${minutes}:${seconds}`
-                },
-            ]);
-            next();
-        });
-        this.controllers.all().forEach((controller) => {
+        this.controllers.all().map((controller) => {
             this.app.use(`/api/${controller.path}`, controller.router);
         });
     }
 
     private initializeSockets(wss: WebSocket.Server): void {
         this.logger.Log({text: "Initializing sockets..", color: this.logger.Yellow});
-        this.sockets.all().forEach((socket) => {
+        this.sockets.all().map((socket) => {
             socket.initialize(wss);
         });
     }
 
     private initializeServer(): void {
-        this.initializeControllers();
-        // this.app.listen(this.port, () => {
-        //     console.log(`App listening on the port ${this.port}`);
-        //   });
         const server = http.createServer(this.app);
         const wss = new WebSocket.Server({ server });
         this.initializeSockets(wss);
+        this.initializeMiddlewares();
+        this.initializeControllers();
         server.listen(this.port, this.hostname, () => {
             console.log(`Server started on ${this.hostname}:${this.port} :)`);
         });
