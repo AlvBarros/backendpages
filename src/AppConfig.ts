@@ -7,11 +7,14 @@ import { Controllers } from "./configuration/Controllers";
 import { Routes } from "./configuration/Routes";
 import { Sockets } from "./configuration/Sockets";
 
+import { Logger } from "./services/logger/Logger";
+
 class AppConfig {
     public app: express.Application;
     public router: express.Router;
     public controllers: Controllers = new Controllers();
     public sockets: Sockets = new Sockets();
+    public logger: Logger = new Logger();
     public port; public hostname;
 
     constructor() {
@@ -34,14 +37,36 @@ class AppConfig {
     }
 
     private initializeControllers(): void {
-        console.log("Initializing controllers...");
+        this.logger.Log({text: "Initializing controllers..", color: this.logger.Yellow});
+        const format = (num: number) => {
+            return ("0" + num).slice(-2);
+        };
+        this.app.use((req, res, next) => {
+            const day = format(new Date().getDate());
+            const month = format(new Date().getMonth() + 1);
+            const year = new Date().getFullYear();
+            const hours = format(new Date().getHours());
+            const minutes = format(new Date().getMinutes());
+            const seconds = format(new Date().getSeconds());
+            this.logger.LogOnOneLine([
+                {
+                    color: this.logger.Green,
+                    text: `${req.method}:${req.path}`
+                },
+                {
+                    color: this.logger.White,
+                    text: ` ${day}/${month}/${year} @ ${hours}:${minutes}:${seconds}`
+                },
+            ]);
+            next();
+        });
         this.controllers.all().forEach((controller) => {
-            this.app.use(`/api${controller.path}`, controller.router);
+            this.app.use(`/api/${controller.path}`, controller.router);
         });
     }
 
     private initializeSockets(wss: WebSocket.Server): void {
-        console.log("Initializing sockets...");
+        this.logger.Log({text: "Initializing sockets..", color: this.logger.Yellow});
         this.sockets.all().forEach((socket) => {
             socket.initialize(wss);
         });
