@@ -12,11 +12,13 @@ export class Test extends Controller {
 
     public test: Route = this.routeFactory.createRoute("GET", "/",
         (request: express.Request, response: express.Response) => {
+            response.statusCode = 200;
             response.send("Test successful!");
         });
 
     public test2: Route = this.routeFactory.createRoute("POST", "/",
         (request: express.Request, response: express.Response) => {
+            response.statusCode = 200;
             response.send("Test 2 successful!");
         });
 

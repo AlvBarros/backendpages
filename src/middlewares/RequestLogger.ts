@@ -20,7 +20,7 @@ export class RequestLogger extends Middleware {
         const seconds = this.Format(new Date().getSeconds());
         this.logger.LogOnOneLine([
             {
-                color: this.logger.Green,
+                color: this.logger.Yellow,
                 text: `${req.method}:${req.path}`
             },
             {
