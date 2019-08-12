@@ -20,13 +20,13 @@ export class RequestLogger extends Middleware {
         const seconds = this.Format(new Date().getSeconds());
         this.logger.LogOnOneLine([
             {
-                color: this.logger.Yellow,
-                text: `${req.method}:${req.path}`
+                color: this.logger.White,
+                text: `[${day}/${month}/${year}] [${hours}:${minutes}:${seconds}]`
             },
             {
-                color: this.logger.White,
-                text: ` ${day}/${month}/${year} @ ${hours}:${minutes}:${seconds}`
-            },
+                color: this.logger.Yellow,
+                text: ` [${req.method}:${req.path}]`
+            }
         ]);
         next();
     }
