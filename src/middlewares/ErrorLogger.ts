@@ -1,4 +1,4 @@
-import { Middleware } from "../configuration/template/Middleware";
+import { Middleware } from "../templates/Middleware";
 
 import { NextFunction } from "express";
 import { Logger } from "../services/logger/Logger";

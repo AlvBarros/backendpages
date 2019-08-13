@@ -1,4 +1,4 @@
-import { Service } from "../../configuration/template/Service";
+import { Service } from "../../templates/Service";
 
 export class Logger extends Service {
 

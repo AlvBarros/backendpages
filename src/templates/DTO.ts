@@ -1,5 +1,5 @@
+import CloudantFactory from "../factories/CloudantFactory";
 import Cloudant from "./Cloudant";
-import CloudantFactory from "./factories/CloudantFactory";
 
 export class DTO<T> {
     public cloudant: Cloudant;

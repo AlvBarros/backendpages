@@ -1,4 +1,4 @@
-import Route from "../Route";
+import Route from "../templates/Route";
 
 export class RouteFactory {
     public createRoute(httpMethod: string, path: string, func: any) {

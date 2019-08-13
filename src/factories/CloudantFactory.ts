@@ -1,7 +1,7 @@
-import dbcreds from "./dbcreds.json";
+import dbcreds from "../config/dbcreds.json";
 
-import Cloudant from "../Cloudant";
-import DTO from "../DTO";
+import Cloudant from "../templates/Cloudant";
+import DTO from "../templates/DTO";
 
 export class CloudantFactory {
     public createConnection(db: string): Cloudant {

@@ -1,6 +1,6 @@
 import { Test } from "../routes/test/Test";
 
-import Controller from "./template/Controller";
+import Controller from "../templates/Controller";
 
 export class Controllers {
     private controllers: Controller[] = [

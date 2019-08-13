@@ -1,7 +1,7 @@
 import cloudant = require("@cloudant/cloudant");
 
 import { resolve } from "url";
-import { Logger } from "../../services/logger/Logger";
+import { Logger } from "../services/logger/Logger";
 
 export class Cloudant {
     public connection: any;

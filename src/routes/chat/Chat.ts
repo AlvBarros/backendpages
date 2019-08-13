@@ -1,6 +1,6 @@
 import * as WebSocket from "ws";
 
-import Socket from "../../configuration/template/Socket";
+import Socket from "../../templates/Socket";
 
 export class ChatSocket extends Socket {
     public initialize = (wss: WebSocket.Server) => {

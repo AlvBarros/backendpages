@@ -3,10 +3,10 @@ import express = require("express");
 import * as http from "http";
 import * as WebSocket from "ws";
 
-import { Controllers } from "./configuration/Controllers";
-import { Middlewares } from "./configuration/Middlewares";
-import { Routes } from "./configuration/Routes";
-import { Sockets } from "./configuration/Sockets";
+import { Controllers } from "./collections/Controllers";
+import { Middlewares } from "./collections/Middlewares";
+import { Routes } from "./collections/Routes";
+import { Sockets } from "./collections/Sockets";
 
 import ErrorLogger from "./middlewares/ErrorLogger";
 import { Logger } from "./services/logger/Logger";
@@ -25,7 +25,7 @@ class AppConfig {
     constructor() {
         const cfenv = require("cfenv");
         const appEnv = cfenv.getAppEnv();
-        this.hostname = appEnv.host;
+        this.hostname = appEnv.host || "localhost";
         this.port = appEnv.port;
         this.app = express();
         this.router = express.Router();

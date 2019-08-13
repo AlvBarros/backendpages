@@ -1,10 +1,10 @@
 import * as express from "express";
 
-import Controller from "../../configuration/template/Controller";
-import Route from "../../configuration/template/Route";
+import Controller from "../../templates/Controller";
+import Route from "../../templates/Route";
 
-import RouteFactory from "../../configuration/template/factories/RouteFactory";
 import { TestDTO } from "../../entities/test/TestDTO";
+import RouteFactory from "../../factories/RouteFactory";
 
 export class Test extends Controller {
     public path: string = "test";

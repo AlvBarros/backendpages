@@ -1,4 +1,4 @@
-import { DTO } from "../../configuration/template/DTO";
+import { DTO } from "../../templates/DTO";
 import TestEntity from "./TestEntity";
 
 export class TestDTO extends DTO<TestEntity> {

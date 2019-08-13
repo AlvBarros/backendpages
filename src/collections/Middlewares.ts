@@ -1,7 +1,7 @@
 import { ErrorLogger } from "../middlewares/ErrorLogger";
 import { RequestLogger } from "../middlewares/RequestLogger";
 
-import Middleware from "./template/Middleware";
+import Middleware from "../templates/Middleware";
 
 export class Middlewares {
     public middlewares: Middleware[] = [
