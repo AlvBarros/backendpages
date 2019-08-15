@@ -11,15 +11,9 @@ export class Controller {
         if (this.routes) {
             this.routes.forEach((route) => {
                 if (route.httpMethod === "GET") {
-                    this.router.get(route.path, async (req, res, next) => {
-                        await Promise.resolve(route.function(req, res, next))
-                            .then(next);
-                    });
+                    this.router.get(route.path, route.handlers());
                 } else if (route.httpMethod === "POST") {
-                    this.router.post(route.path, async (req, res, next) => {
-                        await Promise.resolve(route.function(req, res, next))
-                            .then(next);
-                    });
+                    this.router.post(route.path, route.handlers());
                 }
             });
         }
