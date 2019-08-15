@@ -1,7 +1,7 @@
 import cloudant = require("@cloudant/cloudant");
 
-import { resolve } from "url";
-import { Logger } from "../services/logger/Logger";
+import { Logger } from "../../services/logger/Logger";
+import CloudantIndex from "./CloudantIndex";
 
 export class Cloudant {
     public connection: any;
@@ -25,6 +25,30 @@ export class Cloudant {
 
     public async insert(obj: any, id?: any): Promise<boolean> {
         return this.connection.use(this.database).insert(obj);
+    }
+
+    public async createIndex(index: CloudantIndex): Promise<boolean> {
+      if (!this.findIndex(index)) {
+        return this.connection.index(index.name, index.type, { fields: index.fields })
+        .then((err, result) => {
+          if (err) {
+            throw err;
+          } else {
+            return true;
+          }
+        });
+      } else {
+        return true;
+      }
+    }
+    public async findIndex(index: CloudantIndex) {
+      return this.connection.index((err, result) => {
+        if (err) {
+          throw err;
+        } else {
+          return result.indexes.filter((i) => i.name === index.name).length > 0;
+        }
+      });
     }
 }
 

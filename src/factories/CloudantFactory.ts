@@ -1,6 +1,6 @@
-import dbcreds from "../config/dbcreds.json";
+import dbcreds from "../config/cloudant/dbcreds.json";
 
-import Cloudant from "../templates/Cloudant";
+import Cloudant from "../templates/cloudant/Cloudant";
 import DTO from "../templates/DTO";
 
 export class CloudantFactory {
