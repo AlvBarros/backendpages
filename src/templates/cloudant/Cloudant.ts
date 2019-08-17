@@ -7,11 +7,13 @@ export class Cloudant {
     public connection: any;
     public database: string;
     public logger: Logger;
+    // public indexes: CloudantIndex[];
 
-    constructor(config: object, db: string) {
+    constructor(config: object, db: string) {// , indexes: CloudantIndex[]) {
         this.connection = cloudant(config);
         this.database = db;
         this.logger = new Logger();
+        // this.indexes = indexes;
         this.initializeDatabase();
     }
 
@@ -21,32 +23,55 @@ export class Cloudant {
                 this.logger.Log({text: err, color: this.logger.Red });
             });
         }
+        // TODO: setup way to setup database
+        // this.initializeIndexes();
     }
+
+    // public initializeIndexes(): void {
+    //   this.indexes.map((index) => {
+    //     this.findIndex(index).then((found) => {
+    //       if (!found) {
+    //         return this.createIndex(index);
+    //       }
+    //     });
+    //   });
+    // }
 
     public async insert(obj: any, id?: any): Promise<boolean> {
         return this.connection.use(this.database).insert(obj);
     }
 
     public async createIndex(index: CloudantIndex): Promise<boolean> {
-      if (!this.findIndex(index)) {
-        return this.connection.index(index.name, index.type, { fields: index.fields })
-        .then((err, result) => {
-          if (err) {
-            throw err;
-          } else {
-            return true;
-          }
-        });
-      } else {
-        return true;
-      }
+      return this.connection.index(index.name, index.type, { fields: index.fields })
+      .then((err, result) => {
+        if (err) {
+          throw err;
+        } else {
+          return true;
+        }
+      });
     }
+
     public async findIndex(index: CloudantIndex) {
       return this.connection.index((err, result) => {
         if (err) {
           throw err;
         } else {
           return result.indexes.filter((i) => i.name === index.name).length > 0;
+        }
+      });
+    }
+
+    public async query(field: string, value: string): Promise<any> {
+      const selector = {};
+      selector[field] = value;
+      return await this.connection.use(this.database).find({ selector }, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("result!");
+          console.log(result);
+          return result;
         }
       });
     }

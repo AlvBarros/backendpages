@@ -21,6 +21,8 @@ export class Route {
     public handlers() {
         const handlers = this.middlewares ? this.middlewares.map((m) => m.ProccessRequest) : [];
         handlers.push(this.proccess);
+        console.log("handlers:");
+        console.log(handlers);
         return handlers;
     }
 }

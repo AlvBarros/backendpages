@@ -7,6 +7,7 @@ import User from "../../entities/account/User";
 
 import { UserDTO } from "../../entities/account/UserDTO";
 import RouteFactory from "../../factories/RouteFactory";
+import Authorization from "../../middlewares/Authorization";
 import Authenticator from "../../services/security/Authenticator";
 
 export class Session extends Controller {
@@ -14,13 +15,21 @@ export class Session extends Controller {
     public router = express.Router();
     public readonly routeFactory = new RouteFactory();
     public auth: Authenticator = new Authenticator();
-public userDTO: UserDTO = new UserDTO();
+    public autho: Authorization = new Authorization();
+    public userDTO: UserDTO = new UserDTO();
 
     public login: Route = this.routeFactory.createRoute("POST", "/login",
         async (request: express.Request, response: express.Response) => {
-            const usr = this.userDTO.find(request.body.email, request.body.password);
-            this.auth.generateToken(usr).then((token) => {
-                response.json({ token });
+            this.userDTO.queryByEmail(request.body.email).then((usr) => {
+                console.log("session!");
+                console.log(usr);
+                this.auth.generateToken(usr).then((token) => {
+                    response.json({ token });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    response.json({ error: "Unable to find user." });
+                });
             });
         }
     );
@@ -39,8 +48,14 @@ public userDTO: UserDTO = new UserDTO();
         }
     );
 
+    public testToken: Route = this.routeFactory.createRouteWithMiddlewares("GET", "/test",
+        [this.autho], async (req, res) => {
+            /* test route */
+            res.send("tested.");
+        });
+
     public routes: Route[] = [
-        this.login, this.verifyToken
+        this.login, this.register, this.verifyToken, this.testToken
     ];
 }
 

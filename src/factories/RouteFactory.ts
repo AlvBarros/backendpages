@@ -8,6 +8,7 @@ export class RouteFactory {
 
     public createRouteWithMiddlewares(httpMethod: string, path: string, middlewares: Middleware[], func: any) {
         const route = new Route(httpMethod, path, func);
+        console.log("setting middlewares " + middlewares.length);
         route.setMiddlewares(middlewares);
         return route;
     }

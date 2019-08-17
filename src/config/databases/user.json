@@ -1,0 +1,35 @@
+{
+    "columns": [
+        "name", "email", "password", "profile"
+    ],
+    "indexes": [
+        {
+            "name":"queryById", 
+            "type":"json", 
+            "index": {
+                "fields": ["id"]
+            }
+        },
+        {
+            "name":"queryByName", 
+            "type":"json", 
+            "index": {
+                "fields": ["name"]
+            }
+        },
+        {
+            "name":"queryByEmail", 
+            "type":"json", 
+            "index": {
+                "fields": ["email"]
+            }
+        },
+        {
+            "name":"queryByProfile", 
+            "type":"json", 
+            "index": {
+                "fields": ["profile"]
+            }
+        }
+    ]
+}
