@@ -9,16 +9,28 @@ export class UserDTO extends DTO<User> {
     constructor() {
         super("user");
     }
-    public register(u: User): Promise<boolean> {
-        return super.insert(u);
+    public register(user: User): Promise<boolean> {
+        if (user.validForRegistration()) {
+            if (!user.profile) {
+                user.profile = "DEFAULT";
+            }
+            return super.insert(user);
+        } else {
+            throw new Error("Invalid input.");
+        }
     }
-    public async queryByEmail(email: string): Promise<User> {
-        return await super.query("email", email).then((result) => {
-            console.log("userdto");
-            console.log(result);
-            return new User(result.docs[0].name, result.docs[0].email, result.docs[0].profile);
-        });
+    public async queryByEmail(email: string): Promise<User[]> {
+        return super.query("email", email).then((result) => {
+            if (result.docs.length > 0) {
+                return result.docs.map((doc) => {
+                    return this.generateUserFromDoc(doc);
+                });
+            } else {
+                return new Array<User>();
+            }
+        }).catch((err) => { throw err; });
     }
-    // public login(e: string, p: string): Promise<User> {
-    // }
+    public generateUserFromDoc(doc: IUserDoc): User {
+        return new User(doc.name, doc.email, doc.profile, doc.password);
+    }
 }

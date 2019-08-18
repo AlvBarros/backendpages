@@ -1,0 +1,3 @@
+interface IQueryResult {
+    docs: IDoc[];
+}

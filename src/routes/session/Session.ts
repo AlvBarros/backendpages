@@ -20,30 +20,71 @@ export class Session extends Controller {
 
     public login: Route = this.routeFactory.createRoute("POST", "/login",
         async (request: express.Request, response: express.Response) => {
-            this.userDTO.queryByEmail(request.body.email).then((usr) => {
-                console.log("session!");
-                console.log(usr);
-                this.auth.generateToken(usr).then((token) => {
-                    response.json({ token });
-                })
-                .catch((err) => {
-                    console.log(err);
-                    response.json({ error: "Unable to find user." });
-                });
-            });
+            if (this.validateBody(request.body)) {
+                this.userDTO.queryByEmail(request.body.email).then((result) => {
+                    if (result) {
+                        if (result.length === 1) {
+                            const user = result[0];
+                            if (user.email === request.body.email &&
+                                user.password === request.body.password) {
+                                    this.auth.generateToken(result[0]).then((token) => {
+                                        response.json({ token });
+                                    }).catch((err) => {
+                                        console.log(err);
+                                        response.json({ error: "Unable to find user." });
+                                    });
+                            } else {
+                                throw new Error("Invalid credentials.");
+                            }
+                        } else if (result.length > 1) {
+                            throw new Error("Multiple users found.");
+                        } else if (result.length === 0) {
+                            throw new Error("No user found.");
+                        } else {
+                            throw new Error("Unknown condition found.");
+                        }
+                    }
+                }).catch((err) => { response.json({ error: err.message }); });
+            } else {
+                response.json({ error: "Invalid request body." });
+            }
         }
     );
 
     public register: Route = this.routeFactory.createRoute("POST", "/register",
         async (request: express.Request, response: express.Response) => {
-            response.send("Not yet implemented.");
+            const body = request.body;
+            if (this.validateBody(body)) {
+                this.userDTO.queryByEmail(body.email).then((result) => {
+                    if (result) {
+                        if (result.length === 0) {
+                            const user = new User(body.name, body.email, body.profile, body.password);
+                            this.userDTO.register(user).then((registered) => {
+                                if (registered) {
+                                    this.auth.generateToken(user).then((token) => {
+                                        response.json({ token });
+                                    }).catch((err) => {
+                                        throw err;
+                                    });
+                                } else {
+                                    throw new Error("Failed to register to database.");
+                                }
+                            });
+                        } else {
+                            throw new Error("E-mail already registered.");
+                        }
+                    }
+                }).catch((err) => {
+                    response.json({ error: err.message });
+                });
+            }
         }
     );
 
     public verifyToken: Route = this.routeFactory.createRoute("POST", "/verify",
         async (request: express.Request, response: express.Response) => {
             this.auth.verify(request.body.token).then((info) => {
-                response.json(info);
+                response.json({ success: "Token valid!" });
             });
         }
     );
@@ -57,6 +98,10 @@ export class Session extends Controller {
     public routes: Route[] = [
         this.login, this.register, this.verifyToken, this.testToken
     ];
+
+    public validateBody(body: { email: string, password: string }): boolean {
+        return (!!body.email && !!body.password);
+    }
 }
 
 export default Session;

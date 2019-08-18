@@ -1,5 +1,6 @@
 import cloudant = require("@cloudant/cloudant");
 
+import { resolve } from "dns";
 import { Logger } from "../../services/logger/Logger";
 import CloudantIndex from "./CloudantIndex";
 
@@ -65,15 +66,7 @@ export class Cloudant {
     public async query(field: string, value: string): Promise<any> {
       const selector = {};
       selector[field] = value;
-      return await this.connection.use(this.database).find({ selector }, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("result!");
-          console.log(result);
-          return result;
-        }
-      });
+      return this.connection.use(this.database).find({ selector});
     }
 }
 
