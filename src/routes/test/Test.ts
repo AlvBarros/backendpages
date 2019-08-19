@@ -6,6 +6,8 @@ import Route from "../../templates/Route";
 import { TestDTO } from "../../entities/test/TestDTO";
 import RouteFactory from "../../factories/RouteFactory";
 
+import Authorization from "../../middlewares/Authorization";
+
 export class Test extends Controller {
     public path: string = "test";
     public router = express.Router();
@@ -38,8 +40,13 @@ export class Test extends Controller {
             });
         });
 
+    public authenticatedRoute: Route = this.routeFactory.createRouteWithMiddlewares("GET", "/auth",
+        [new Authorization()], async (request: express.Request, response: express.Response) => {
+            response.json({ success: "Authenticated successfully." });
+        });
+
     public routes: Route[] = [
-        this.test, this.test2, this.test3, this.testInsert
+        this.test, this.test2, this.test3, this.testInsert, this.authenticatedRoute
     ];
 }
 

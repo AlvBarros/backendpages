@@ -6,23 +6,23 @@ import CloudantIndex from "./CloudantIndex";
 
 export class Cloudant {
     public connection: any;
-    public database: any;
+    public database: string;
     public logger: Logger;
     // public indexes: CloudantIndex[];
 
     constructor(config: object, db: string) {// , indexes: CloudantIndex[]) {
         this.connection = cloudant(config);
+        this.database = db;
         this.logger = new Logger();
         // this.indexes = indexes;
         this.initializeDatabase();
     }
 
     public initializeDatabase(): void {
-        try { this.database = this.connection.use(this.database); } catch {
+        try { this.connection.use(this.database); } catch {
             this.connection.db.create(this.database, (err) => {
                 this.logger.Log({text: err, color: this.logger.Red });
             });
-            this.database = this.connection.use(this.database);
         }
         // TODO: setup way to setup database
         // this.initializeIndexes();
@@ -39,7 +39,7 @@ export class Cloudant {
     // }
 
     public async insert(obj: any, id?: any): Promise<boolean> {
-        return this.database.insert(obj);
+        return this.connection.use(this.database).insert(obj);
     }
 
     public async createIndex(index: CloudantIndex): Promise<boolean> {
@@ -66,7 +66,7 @@ export class Cloudant {
     public async query(field: string, value: string): Promise<any> {
       const selector = {};
       selector[field] = value;
-      return this.database.find({ selector});
+      return this.connection.use(this.database).find({ selector});
     }
 }
 
