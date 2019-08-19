@@ -22,6 +22,7 @@ export class Menu extends Controller {
             } else {
                 const tokenHeader = request.header("authorization").split("Bearer ")[1];
                 this.authentication.verify(tokenHeader).then((result) => {
+                    //TODO: get menu from user data
                     response.json(result);
                 }).catch((err) => {
                     throw err;
