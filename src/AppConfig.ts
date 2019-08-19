@@ -20,13 +20,21 @@ class AppConfig {
     public middlewares: Middlewares = new Middlewares();
 
     public logger: Logger = new Logger();
-    public port; public hostname;
+    public enviroment: string;
+    public port;
+    public hostname;
 
-    constructor() {
-        const cfenv = require("cfenv");
-        const appEnv = cfenv.getAppEnv();
-        this.hostname = appEnv.host || "localhost";
-        this.port = appEnv.port;
+    constructor(env: string = "prod") {
+        this.enviroment = env;
+        if (this.enviroment === "prod") {
+            const cfenv = require("cfenv");
+            const appEnv = cfenv.getAppEnv();
+            this.hostname = appEnv.host;
+            this.port = appEnv.port;
+        } else if (this.enviroment === "dev") {
+            this.hostname = "localhost";
+            this.port = "6001";
+        }
         this.app = express();
         this.router = express.Router();
         this.config();
@@ -77,7 +85,8 @@ class AppConfig {
         this.initializeMiddlewares();
         this.initializeControllers();
         server.listen(this.port, this.hostname, () => {
-            console.log(`Server started on ${this.hostname}:${this.port} :)`);
+            this.logger.Log({ text: `Running on enviroment: ${this.enviroment}.`, color: this.logger.Blue });
+            this.logger.Log({ text: `Server started on ${this.hostname}:${this.port} :)`, color: this.logger.Yellow });
         });
 
     }

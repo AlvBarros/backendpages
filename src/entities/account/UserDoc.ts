@@ -3,6 +3,8 @@ interface IUserDoc extends IDoc {
     email: string;
     profile: string;
     password: string;
+    messages: string[];
+    profilePicture: string;
 }
 
 interface IUserQueryResult {

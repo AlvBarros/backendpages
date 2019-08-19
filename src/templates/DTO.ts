@@ -3,7 +3,7 @@ import CloudantFactory from "../factories/CloudantFactory";
 import Cloudant from "./cloudant/Cloudant";
 import CloudantIndex from "./cloudant/CloudantIndex";
 
-export class DTO<T> {
+export class DTO {
     public cloudant: Cloudant;
 
     constructor(db: string) {
@@ -19,7 +19,7 @@ export class DTO<T> {
         return this.cloudant.query(field, value);
     }
 
-    public async insert(obj: T): Promise<boolean> {
+    public async insert(obj: any): Promise<boolean> {
         return await this.cloudant.insert(obj);
     }
 

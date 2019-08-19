@@ -1,7 +1,7 @@
 import { DTO } from "../../templates/DTO";
 import TestEntity from "./TestEntity";
 
-export class TestDTO extends DTO<TestEntity> {
+export class TestDTO extends DTO {
 
     constructor() {
         super("test");
