@@ -1,9 +1,9 @@
-import UserConfig from "../../config/databases/User.json";
+import UserConfig from "../../config/databases/user.json";
 import CloudantIndex from "../../templates/cloudant/CloudantIndex";
 import { DTO } from "../../templates/DTO";
 import User from "./User";
 
-export class UserDTO extends DTO<User> {
+export class UserDTO extends DTO {
     public indexes: CloudantIndex[];
 
     constructor() {
