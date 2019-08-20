@@ -28,25 +28,17 @@ export class Session extends Controller {
             if (this.validateBody(request.body)) {
                 this.userDTO.queryByEmail(request.body.email).then((result) => {
                     if (result) {
-                        if (result.length === 1) {
-                            const user = result[0];
-                            if (user.email === request.body.email &&
-                                user.password === request.body.password) {
-                                    user.password = "";
-                                    this.auth.generateToken(user).then((token) => {
-                                        response.json({ token });
-                                    }).catch((err) => {
-                                        response.json({ error: "Unable to generate token." });
-                                    });
-                            } else {
-                                throw new Error("Invalid credentials.");
-                            }
-                        } else if (result.length > 1) {
-                            throw new Error("Multiple users found.");
-                        } else if (result.length === 0) {
-                            throw new Error("No user found.");
+                        const user = result[0];
+                        if (user.email === request.body.email &&
+                            user.password === request.body.password) {
+                                user.password = "";
+                                this.auth.generateToken(user).then((token) => {
+                                    response.json({ token });
+                                }).catch((err) => {
+                                    throw new Error("Unable to generate token.");
+                                });
                         } else {
-                            throw new Error("Unknown condition found.");
+                            throw new Error("Invalid credentials.");
                         }
                     }
                 }).catch((err) => { response.json({ error: err.message }); });

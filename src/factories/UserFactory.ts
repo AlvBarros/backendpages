@@ -1,6 +1,9 @@
 import User from "../entities/account/User";
+import UserDTO from "../entities/account/UserDTO";
 
 import Profiles from "../entities/profiles/profiles.json";
+
+import Authenticator from "../services/security/Authenticator";
 
 export class UserFactory {
     public generateUserFromDoc(doc: IUserDoc): User {
@@ -23,6 +26,31 @@ export class UserFactory {
             return user;
         } else {
             throw new Error("Invalid input.");
+        }
+    }
+    public async generateUserFromRequestHeader(headers: any): Promise<User> {
+        if (!headers.authorization || headers.authorization.split("Bearer ").length !== 2) {
+            throw new Error("Must be authenticated.");
+        } else {
+            const auth = new Authenticator();
+            const token = headers.authorization.split("Bearer ")[1];
+            return auth.verify(token).then((result) => {
+                return new UserDTO().queryByEmail(result);
+            });
+        }
+    }
+    public generateUserFromRequestBody(body: any): User {
+        if (!body.name || !body.email || !body.profile) {
+            throw new Error("Invalid input.");
+        } else {
+            const user = new User();
+            user.name = body.name || "";
+            user.email = body.email || "";
+            user.password = body.password || "";
+            user.profile = body.profile || Profiles.default;
+            user.messages = body.messages || [];
+            user.profilePicture = body.profilePicture || "";
+            return user;
         }
     }
 }

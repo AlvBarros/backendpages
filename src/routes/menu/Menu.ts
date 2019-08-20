@@ -4,10 +4,14 @@ import Controller from "../../templates/Controller";
 import Route from "../../templates/Route";
 
 import RouteFactory from "../../factories/RouteFactory";
+
 import Authorization from "../../middlewares/Authorization";
+
 import Authentication from "../../services/security/Authenticator";
 
+import UserDTO from "../../entities/account/UserDTO";
 import Profiles from "../../entities/profiles/profiles.json";
+import UserFactory from "../../factories/UserFactory";
 
 export class Menu extends Controller {
     public path: string = "menu";
@@ -19,12 +23,11 @@ export class Menu extends Controller {
     public menu: Route = this.routeFactory.createRouteWithMiddlewares("GET", "",
     [this.authorization], async (request: express.Request, response: express.Response) => {
         try {
-            const tokenHeader = request.header("authorization").split("Bearer ")[1];
-            this.authentication.verify(tokenHeader).then((result) => {
+            new UserFactory().generateUserFromRequestHeader(request.headers).then((user) => {
                 response.json({
-                    name: result.name || "",
-                    profile: result.profile || Profiles.default,
-                    profilePicture: result.profilePicture || ""
+                    name: user.name || "",
+                    profile: user.profile || Profiles.default,
+                    profilePicture: user.profilePicture || ""
                 });
             }).catch((err) => {
                 throw err;

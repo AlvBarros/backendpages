@@ -8,11 +8,10 @@ import Authenticator from "../services/security/Authenticator";
 export class Authorization extends Middleware {
 
     public ProccessRequest(req: any, res: any, next: NextFunction): void {
-        const auth = new Authenticator();
         if (!req.headers.authorization || req.headers.authorization.split("Bearer ").length !== 2) {
             throw new Error("Must be authenticated.");
         } else {
-            auth.verify(req.headers.authorization.split("Bearer ")[1]).then((result) => {
+            new Authenticator().verify(req.headers.authorization.split("Bearer ")[1]).then((result) => {
                 if (result) {
                     next();
                 } else {

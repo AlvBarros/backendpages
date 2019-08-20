@@ -3,6 +3,7 @@ import UserFactory from "../../factories/UserFactory";
 import CloudantIndex from "../../templates/cloudant/CloudantIndex";
 import { DTO } from "../../templates/DTO";
 import User from "./User";
+import Hotel from "../hotel/Hotel";
 
 export class UserDTO extends DTO {
     public indexes: CloudantIndex[];
@@ -14,14 +15,12 @@ export class UserDTO extends DTO {
     public register(user: User): Promise<boolean> {
         return super.insert(user);
     }
-    public async queryByEmail(email: string): Promise<User[]> {
+    public async queryByEmail(email: string): Promise<User> {
         return this.query("email", email).then((result) => {
-            if (result.docs.length > 0) {
-                return result.docs.map((doc) => {
-                    return this.userFactory.generateUserFromDoc(doc);
-                });
+            if (result.docs.length !== 1) {
+                return this.userFactory.generateUserFromDoc(result.docs[0]);
             } else {
-                return new Array<User>();
+                throw new Error("Multiple users with the same e-mail.");
             }
         }).catch((err) => { throw err; });
     }
@@ -39,4 +38,8 @@ export class UserDTO extends DTO {
     public query(field: string, value: string): Promise<IUserQueryResult> {
         return this.cloudant.query(field, value);
     }
+    public async registerHotel(user: { email: string }, hotel: Hotel): Promise<boolean> {
+        
+    }
 }
+export default UserDTO;
