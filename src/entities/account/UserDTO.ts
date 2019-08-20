@@ -26,7 +26,7 @@ export class UserDTO extends DTO {
         }).catch((err) => { throw err; });
     }
     public async queryByName(name: string): Promise<User[]> {
-        return super.query("name", name).then((result) => {
+        return this.query("name", name).then((result) => {
             if (result.docs.length > 0) {
                 return result.docs.map((doc) => {
                     return this.userFactory.generateUserFromDoc(doc);

@@ -2,9 +2,7 @@ import StringValidator from "../../services/utils/StringValidator";
 
 import Profiles from "../profiles/profiles.json";
 
-export class User implements IUserDoc {
-    public _id: string;
-    public _rev: string;
+export class User {
     public name: string;
     public email: string;
     public password: string;

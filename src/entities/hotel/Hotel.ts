@@ -1,6 +1,4 @@
-export class Hotel implements IHotelDoc{
-    public _id: string;
-    public _rev: string;
+export class Hotel {
     public name: string;
     public location: { cep: string, address: string };
 }

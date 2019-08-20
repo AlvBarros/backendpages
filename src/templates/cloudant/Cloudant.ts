@@ -14,18 +14,18 @@ export class Cloudant {
         this.connection = cloudant(config);
         this.database = db;
         this.logger = new Logger();
+        // TODO: database generation
         // this.indexes = indexes;
-        this.initializeDatabase();
+        // this.initializeDatabase();
     }
 
     public initializeDatabase(): void {
-        try { this.connection.use(this.database); } catch {
-            this.connection.db.create(this.database, (err) => {
+      // NOT ACTUALLY CREATING DATABASES
+      try { this.connection.use(this.database); } catch {
+        this.connection.db.create(this.database, (err) => {
                 this.logger.Log({text: err, color: this.logger.Red });
             });
         }
-        // TODO: setup way to setup database
-        // this.initializeIndexes();
     }
 
     // public initializeIndexes(): void {
@@ -39,7 +39,7 @@ export class Cloudant {
     // }
 
     public async insert(obj: any, id?: any): Promise<boolean> {
-        return this.connection.use(this.database).insert(obj);
+      return this.connection.use(this.database).insert(obj);
     }
 
     public async createIndex(index: CloudantIndex): Promise<boolean> {

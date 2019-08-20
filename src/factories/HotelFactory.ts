@@ -2,7 +2,7 @@ import Hotel from "../entities/hotel/Hotel";
 
 export class HotelFactory {
     public createHotelFromRequest(request: any) {
-        if (!request.name || !request.location || !request.location.cep || !request.location.address){
+        if (!request.name || !request.location || !request.location.cep || !request.location.address) {
             throw new Error("Invalid input.");
         } else {
             const hotel = new Hotel();
