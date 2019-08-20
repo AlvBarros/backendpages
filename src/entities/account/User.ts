@@ -1,6 +1,10 @@
 import StringValidator from "../../services/utils/StringValidator";
 
-export class User {
+import Profiles from "../profiles/profiles.json";
+
+export class User implements IUserDoc {
+    public _id: string;
+    public _rev: string;
     public name: string;
     public email: string;
     public password: string;
@@ -12,7 +16,7 @@ export class User {
     constructor() {
         this.name = "";
         this.email = "";
-        this.profile = "";
+        this.profile = Profiles.default;
         this.password = "";
     }
 

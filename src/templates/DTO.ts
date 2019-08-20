@@ -15,10 +15,6 @@ export class DTO {
         return new CloudantIndex(obj.name, obj.type, obj.index.fields);
     }
 
-    public query(field: string, value: string): Promise<IUserQueryResult> {
-        return this.cloudant.query(field, value);
-    }
-
     public async insert(obj: any): Promise<boolean> {
         return await this.cloudant.insert(obj);
     }

@@ -85,7 +85,7 @@ class AppConfig {
         this.initializeMiddlewares();
         this.initializeControllers();
         server.listen(this.port, this.hostname, () => {
-            this.logger.Log({ text: `Running on enviroment: ${this.enviroment}.`, color: this.logger.Blue });
+            this.logger.Log({ text: `Running on enviroment: ${this.enviroment}.`, color: this.logger.White });
             this.logger.Log({ text: `Server started on ${this.hostname}:${this.port} :)`, color: this.logger.Yellow });
         });
 

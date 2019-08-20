@@ -6,9 +6,12 @@ import Route from "../../templates/Route";
 import User from "../../entities/account/User";
 
 import { UserDTO } from "../../entities/account/UserDTO";
+
 import RouteFactory from "../../factories/RouteFactory";
 import UserFactory from "../../factories/UserFactory";
+
 import Authorization from "../../middlewares/Authorization";
+
 import Authenticator from "../../services/security/Authenticator";
 
 export class Session extends Controller {
@@ -20,7 +23,7 @@ export class Session extends Controller {
     public userDTO: UserDTO = new UserDTO();
     public userFactory = new UserFactory();
 
-    public login: Route = this.routeFactory.createRoute("POST", "/login",
+    public login: Route = this.routeFactory.createRoute("POST", "login",
         async (request: express.Request, response: express.Response) => {
             if (this.validateBody(request.body)) {
                 this.userDTO.queryByEmail(request.body.email).then((result) => {
@@ -29,11 +32,11 @@ export class Session extends Controller {
                             const user = result[0];
                             if (user.email === request.body.email &&
                                 user.password === request.body.password) {
-                                    this.auth.generateToken(result[0]).then((token) => {
+                                    user.password = "";
+                                    this.auth.generateToken(user).then((token) => {
                                         response.json({ token });
                                     }).catch((err) => {
-                                        console.log(err);
-                                        response.json({ error: "Unable to find user." });
+                                        response.json({ error: "Unable to generate token." });
                                     });
                             } else {
                                 throw new Error("Invalid credentials.");
@@ -53,7 +56,7 @@ export class Session extends Controller {
         }
     );
 
-    public register: Route = this.routeFactory.createRoute("POST", "/register",
+    public register: Route = this.routeFactory.createRoute("POST", "register",
         async (request: express.Request, response: express.Response) => {
             const body = request.body;
             if (this.validateBody(body)) {
@@ -83,7 +86,7 @@ export class Session extends Controller {
         }
     );
 
-    public verifyToken: Route = this.routeFactory.createRoute("POST", "/verify",
+    public verifyToken: Route = this.routeFactory.createRoute("POST", "verify",
         async (request: express.Request, response: express.Response) => {
             const tokenHeader = request.header("authorization").split("Bearer ")[1];
             this.auth.verify(tokenHeader).then((info) => {
@@ -93,7 +96,7 @@ export class Session extends Controller {
             });
         }
     );
-    public verifyToken2: Route = this.routeFactory.createRoute("POST", "/verify2",
+    public verifyToken2: Route = this.routeFactory.createRoute("POST", "verify2",
         async (request: express.Request, response: express.Response) => {
             this.auth.verify(request.body.token).then((info) => {
                 response.json({ success: "Token valid!" });
@@ -103,7 +106,7 @@ export class Session extends Controller {
         }
     );
 
-    public testToken: Route = this.routeFactory.createRouteWithMiddlewares("GET", "/test",
+    public testToken: Route = this.routeFactory.createRouteWithMiddlewares("GET", "test",
         [new Authorization()], async (req, res) => {
             /* test route */
             res.send("tested.");
