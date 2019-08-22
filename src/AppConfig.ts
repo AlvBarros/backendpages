@@ -3,13 +3,13 @@ import express = require("express");
 import * as http from "http";
 import * as WebSocket from "ws";
 
-import { Controllers } from "./collections/Controllers";
-import { Middlewares } from "./collections/Middlewares";
-import { Routes } from "./collections/Routes";
-import { Sockets } from "./collections/Sockets";
+import { Controllers } from "./routing/collections/Controllers";
+import { Middlewares } from "./routing/collections/Middlewares";
+import { Routes } from "./routing/collections/Routes";
+import { Sockets } from "./routing/collections/Sockets";
 
-import ErrorLogger from "./middlewares/ErrorLogger";
-import { Logger } from "./services/logger/Logger";
+import ErrorLogger from "./routing/middlewares/ErrorLogger";
+import { Logger } from "./routing/services/logger/Logger";
 
 class AppConfig {
     public app: express.Application;
